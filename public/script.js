@@ -1,13 +1,23 @@
-async function updateVisitors() {
-  try {
-    const res = await fetch("/api/visitors");
-    const data = await res.json();
-    document.getElementById("visitor-count").textContent = data.visitors;
-  } catch (e) {
-    console.error("Failed to fetch visitors", e);
-  }
+async function loadStats() {
+  const res = await fetch("/api/stats");
+  const data = await res.json();
+
+  document.getElementById("total").textContent = data.total;
+  document.getElementById("today").textContent = data.today;
+
+  const tbody = document.getElementById("table-body");
+  tbody.innerHTML = "";
+
+  data.last.forEach(v => {
+    const row = `<tr>
+      <td>${v.id}</td>
+      <td>${v.ip}</td>
+      <td>${v.user_agent}</td>
+      <td>${v.ts}</td>
+    </tr>`;
+    tbody.innerHTML += row;
+  });
 }
 
-// Update every 3 seconds
-setInterval(updateVisitors, 3000);
-updateVisitors();
+setInterval(loadStats, 3000);
+loadStats();

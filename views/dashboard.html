@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Analytics Dashboard</title>
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Analytics Dashboard</h1>
-    <p>Total visitors: <span id="visitor-count">0</span></p>
+
+<div class="container">
+  <h1>Analytics Dashboard</h1>
+
+  <div class="cards">
+    <div class="card">
+      <h2>Total Visitors</h2>
+      <p id="total">0</p>
+    </div>
+    <div class="card">
+      <h2>Today</h2>
+      <p id="today">0</p>
+    </div>
   </div>
+
+  <h2>Last Visits</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>IP</th>
+        <th>Browser</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+
 <script src="/script.js"></script>
 </body>
 </html>
