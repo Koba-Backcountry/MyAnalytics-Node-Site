@@ -1,0 +1,40 @@
+name: Deploy Analytics Node Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            if [ ! -d "/home/ubuntu/MyAnalyticsNodeSite" ]; then
+              git clone https://github.com/Koba-Backcountry/MyAnalytics-Node-Site.git /home/ubuntu/MyAnalyticsNodeSite
+            fi
+
+            cd /home/ubuntu/MyAnalyticsNodeSite
+
+            git pull
+
+            if ! command -v docker &> /dev/null; then
+              sudo apt-get update
+              sudo apt-get install -y docker.io
+            fi
+
+            docker build -t analytics-node-site .
+            docker rm -f analytics-node-container || true
+            docker run -d -p 80:80 --name analytics-node-container analytics-node-site
